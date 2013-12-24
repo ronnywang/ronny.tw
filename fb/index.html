@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>粉絲專頁按讚轉換分析</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.css">
+</head>
+<body>
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '463990810357246',                        // App ID from the app dashboard
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true                                  // Look for social plugins on the page
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/zh_TW/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+<div class="container">
+    <button id="login">登入</button>
+<form>
+<input type="text" name="name" id="name">
+<button id="button">加入粉絲專頁</button>
+</form>
+<button class="quick" data-link="https://www.facebook.com/ciaociaorose">于卉喬</button>
+<button class="quick" data-link="https://www.facebook.com/twjobhelper">求職小幫手</button>
+<button class="quick" data-link="https://www.facebook.com/pixnet.net">痞客邦</button>
+<table class="table">
+    <thead>
+        <tr>
+            <td>粉絲專頁名稱</td>
+            <td>按讚數</td>
+            <td>討論人數</td>
+            <td>平均讚數</td>
+            <td>最大讚數</td>
+            <td>最小讚數</td>
+            <td>按讚轉換數(<a title="平均讚數 / 按讚數">?</a>)</td>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</div>
+<script>
+$('#login').click(function(e){
+    FB.login();
+});
+
+$('.quick').click(function(e){
+        $('#name').val($(this).attr('data-link'));
+        $('#button').click();
+});
+$('#button').click(function(e){
+    e.preventDefault();
+    var matches = $('#name').val().match('facebook\.com/([0-9A-Za-z\.]*)');
+    if (!matches) {
+        alert('不是合法的網址');
+        return;
+    }
+    var page_id = matches[1];
+    FB.api('/' + page_id, function(page_info) {
+        if ('undefined' == typeof(page_info.likes)) {
+            alert('這不是粉絲專頁');
+            return;
+        }
+        var tr_dom = $('<tr></tr>');
+        var td_dom = $('<td></td>');
+        td_dom.append($('<a></a>').attr({href: page_info.link, target: '_blank', title: page_info.about}).text(page_info.name));
+        tr_dom.append(td_dom);
+
+        td_dom = $('<td></td>').text(page_info.likes);
+        tr_dom.append(td_dom);
+
+        td_dom = $('<td></td>').text(page_info.talking_about_count);
+        tr_dom.append(td_dom);
+
+        tr_dom.append($('<td></td>'));
+        tr_dom.append($('<td></td>'));
+        tr_dom.append($('<td></td>'));
+        tr_dom.append($('<td></td>'));
+
+        $('tbody').append(tr_dom);
+
+        var depth = 0;
+        var insight_callback = function(res){
+            for (var i = 0; i <res.data.length; i ++) {
+                for (var j = 0 ; j < res.data[i].values.length; j ++) {
+                    console.log(res.data[i].name + ' ' + res.data[i].values[j].end_time + ' ' + res.data[i].values[j].value);
+                }
+            }
+
+            if (res.paging.previous && depth ++ < 5) {
+                FB.api(res.paging.previous, insight_callback);
+            }
+        };
+        FB.api('/' + page_id + '/insights/page_fans', insight_callback);
+        FB.api('/' + page_id + '/feed', function(res){
+            var max_likes = null;
+            var min_likes = null;
+            var total_likes = 0;
+            var count = 0;
+
+            console.log(res);
+            for (var i = 0; i < res.data.length; i ++) {
+                if (res.data[i].from.id != page_info.id) {
+                    continue;
+                }
+                if ('undefined' == typeof(res.data[i].likes)) {
+                    continue;
+                }
+                like_count = res.data[i].likes.count;
+                if (null === max_likes || like_count > res.data[max_likes].likes.count) {
+                    max_likes = i;
+                }
+                if (null === min_likes || like_count < res.data[min_likes].likes.count) {
+                    min_likes = i;
+                }
+                total_likes += like_count;
+                count ++;
+            }
+
+            tr_dom.find('td').eq(3).text(total_likes / count);
+            tr_dom.find('td').eq(4).append($('<a></a>').attr({title: res.data[max_likes].message, href: res.data[max_likes].link, target: '_blank'}).text(res.data[max_likes].likes.count));
+            tr_dom.find('td').eq(5).append($('<a></a>').attr({title: res.data[min_likes].message, href: res.data[min_likes].link, target: '_blank'}).text(res.data[min_likes].likes.count));
+            tr_dom.find('td').eq(6).text(total_likes / count / page_info.likes);
+        });
+    });
+
+});
+</script>
+</body>
+</html> 

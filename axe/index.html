@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>斧頭幫</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">斧頭幫大挑戰</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container" id="content">
+    <h1>關卡1 - 基本Table</h1>
+    <p>處理基本的 table ，將裡面的資料取出</p>
+
+    <h3>網頁內容</h3>
+    <p>網址: <code>http://axe-level-1.herokuapp.com/</code></p>
+    <iframe src="http://axe-level-1.herokuapp.com" style="width: 100%; height: 300px"></iframe>
+
+    <h3>答案格式</h3>
+    <code>
+        [{"name": "姓名", "grades": {"國語": 90, "數學": 89, ...}}, ... ]
+    </code>
+
+    <h3>回傳答案</h3>
+    <form method="post">
+        您的名稱: <input type="text"><br>
+        <textarea style="width: 100%" placeholder="答案貼這邊"></textarea>
+        <button type="submit">送出答案</button>
+    </form>
+
+    <h3>討論</h3>
+    <p>您可以將您算出答案的程式上傳至 github ，並且在這邊與大家分享，但請不要將答案貼在這邊</p>
+    這邊放 Facebook Comment
+</div>
+
+</body>
+</html>

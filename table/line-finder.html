@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Image table line finder tutorial</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.css">
+<script src="canvas_floodfill_v1.0.1.min.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="1024" height="768"></canvas>
+<script>
+var img_obj = new Image;
+var ctx = $('#canvas')[0].getContext('2d');
+var width = 1024;
+var height = 768;
+
+var is_color = function(data, color){
+    if ('black' == color) {
+        return data[0] == 0 && data[1] == 0 && data[2] == 0;
+    }
+
+    if ('white' == color) {
+        return data[0] == 255 && data[1] == 255 && data[2] == 255;
+    }
+
+    if ('red' == color) {
+        return data[0] == 255 && data[1] == 0 && data[2] == 0;
+    }
+
+    if ('green' == color) {
+        return data[0] == 0 && data[1] == 255 && data[2] == 0;
+    }
+};
+
+var count_red = function(center_x, center_y){
+    var i;
+    for (i = 1; ; i ++) {
+        var is_empty = true;
+        var x = center_x - i;
+        var y = center_y - i;
+        $.each([[0, 1], [1, 0], [0, -1], [-1, 0]], function(id, way){
+            var x_delta = way[0];
+            var y_delta = way[1];
+            for (var j = 0; j < 2 * i; j ++) {
+                x += x_delta;
+                y += y_delta;
+
+                if (x < 0 || x >= width) {
+                    continue;
+                }
+                if (y < 0 || y >= height) {
+                    continue;
+                }
+
+                if (is_color(ctx.getImageData(x, y, 1, 1).data, 'red')) {
+                    is_empty = false;
+                    break;
+                }
+            }
+        });
+        if (is_empty) {
+            break;
+        }
+    }
+    return i;
+};
+
+var step_1 = function(){
+    alert("第一步，先把圖片畫在 canvas 上");
+    img_obj.onload = function(){
+        ctx.drawImage(img_obj, 0, 0, width, height);
+        step_2();
+    };
+    img_obj.src = 'pic.png';
+
+};
+
+var step_2 = function(){
+    alert("第二步，將圖轉成只有純黑跟純白單純化");
+    var imageData = ctx.getImageData(0, 0, width, height);
+    var data = imageData.data;
+    for (var i = 0; i < data.length; i += 4) {
+        if (data[i] + data[i + 1] + data[i + 2] > 128 * 3) {
+            data[i] = data[i + 1] = data[i + 2] = 255;
+        } else {
+            data[i] = data[i + 1] = data[i + 2] = 0;
+        }
+    }
+    imageData.data = data;
+    ctx.putImageData(imageData, 0, 0);
+
+    step_3();
+};
+
+var step_3 = function(){
+    alert("第三步，延著正中間最上方，畫一條垂直線下來，如果遇到黑色就停下來，並且對他做填色");
+    var x = Math.floor(width / 2);
+    var max_count = 0;
+    var max_point = [];
+    var hint_1 = hint_2 = hint_3 = hint_4 = hint_5 = hint_6 = false;
+    for (var i = 0; i < height; i ++) {
+        var y = i;
+        if (is_color(ctx.getImageData(x, y, 1, 1).data, 'white')) {
+            continue;
+        }
+
+        if (is_color(ctx.getImageData(x, y, 1, 1).data, 'green')) {
+            continue;
+        }
+
+        if (!hint_1) {
+            alert("找到了不是白色的地方，就把他填上紅色");
+            hint_1 = true;
+        }
+        floodFill(x, y, ctx, '#ff0000', 0);
+
+        if (!hint_2) {
+            alert("然後計算被塗成紅色的區域面積有多大");
+            hint_2 = true;
+        }
+
+        count = count_red(x, y);
+        if (hint_3 && hint_4) {
+            alert("下一個");
+        }
+        if (count > max_count) {
+            if (max_point.length) {
+                floodFill(max_point[0], max_point[1], ctx, '#ffffff', 0);
+            }
+            max_count = count;
+            max_point = [x, y];
+            if (!hint_3) {
+                alert("計算後發現面積是目前最大的，就把他改塗成綠色，接著繼續往下找");
+                hint_3 = true;;
+            }
+            floodFill(x, y, ctx, '#00ff00', 0);
+        } else {
+            if (!hint_4) {
+                alert("如果下一個塗成紅色的區域比較小，就直接跳過繼續往下");
+                hint_4 = true;
+            }
+            floodFill(x, y, ctx, '#ffffff', 0);
+        }
+    }
+    alert("最後，得到最大面積的區域，應該就是框線所在位置了");
+    step_4(max_point);
+}
+
+var step_4 = function(max_point) {
+};
+
+step_1();
+</script>
+</body>
+</html>

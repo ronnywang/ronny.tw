@@ -149,7 +149,74 @@ var step_3 = function(){
 }
 
 var step_4 = function(max_point) {
-    alert("TODO... 接下來還要 demo 怎麼正確找到框線斜率");
+    alert("找到了框線是哪個區塊，接下來回到剛剛步驟三第一個找到框線的點，從這點出發找第一條水平線");
+    alert("這邊有一個假設，就是第一條水平線會接近 0 度，但也有可能歪斜到 -45 度 ~ 45 度之間");
+    alert("為了加速找到，會以 0 => -1 => 1 => -2 => 2 => -3 => 3 這樣的順序找到 -45 => 45 ");
+
+    var top_x = max_point[0];
+    var top_y = max_point[1];
+
+    var angle_base = null;
+    var bottom_y = null;
+    for (var check_y = top_y; check_y < height; check_y ++ ) {
+        if (!is_color(ctx.getImageData(top_x, check_y, 1, 1).data, 'green')) {
+            continue;
+        }
+        bottom_y = check_y;
+        max_count = 0;
+        boost = 10;
+        var i_limit = (null === angle_base) ? (90 * boost) : (5 * boost);
+        for (i = 1; i < i_limit; i ++) {
+            angle = (angle_base ? angle_base : 0) + Math.floor(i / 2) / boost * (i % 2 ? 1 : -1);
+
+            // r = y * sinθ+ x * cosθ (為了讓 θ= 0是水平線，所以把 cos, sin 對調
+            theta = Math.PI * (angle + 90) / 180;
+            r = check_y * Math.sin(theta) + top_x * Math.cos(theta);
+
+            no_point_counter_a = no_point_counter_b = 0;
+            for (x_pos = 1; x_pos < width; x_pos ++) {
+                x = top_x + Math.floor(x_pos / 2) * ((x_pos % 2) ? -1 : 1);
+                y = (r - x * Math.cos(theta)) / Math.sin(theta);
+                if (y < 0 || y > height) {
+                    break;
+                }
+                $.each([-2, -1, 0, 1, 2], function(range){
+                    if (is_color(ctx.getImageData(Math.floor(x), Math.floor(y + range), 1, 1).data, 'green')) {
+                        if (x_pos % 2) {
+                            no_point_counter_a = 0;
+                            max_xy = [x, y];
+                        } else {
+                            no_point_counter_b = 0;
+                            min_xy = [x, y];
+                        }
+                    }
+                });
+                // 連續超過 20 點找不到東西就表示這角度不對
+                if (no_point_counter_a ++ > 20 || no_point_counter_b ++ > 20) {
+                    break;
+                }
+            }
+            // 記錄下能找到最遠的角度
+            if (x_pos > max_count) {
+                max_points = [min_xy, max_xy];
+                max_count = x_pos;
+                max_angle = angle;
+                max_r = r;
+                max_theta = theta;
+            }
+        }
+        angle_base = max_angle;
+        if (Math.pow(max_points[0][1] - max_points[1][1], 2) + Math.pow(max_points[0][0] - max_points[1][0], 2) < 100 * 100) {
+            continue;
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(max_points[0][0], max_points[0][1]);
+        ctx.lineTo(max_points[1][0], max_points[1][1]);
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+        alert("以角度 " + angle_base + " 找到一條");
+    }
 };
 
 step_1();

@@ -155,6 +155,8 @@ var step_4 = function(max_point) {
 
     var top_x = max_point[0];
     var top_y = max_point[1];
+    var hint_1 = false;
+    var hint_2 = 0;
 
     var angle_base = null;
     var bottom_y = null;
@@ -166,6 +168,12 @@ var step_4 = function(max_point) {
         max_count = 0;
         boost = 10;
         var i_limit = (null === angle_base) ? (90 * boost) : (5 * boost);
+        if (check_y === top_y) {
+            alert("以上一步驟找到框線的那一點出發，先以 -45 度 ~ 45 度的範圍找出哪一個角度的射線可以重合最多點, 開始計算");
+        } else if (!hint_1) {
+            alert("第一條線的角度是 " + angle_base + "，因為一張表格理論上水平線應該都是平行的，所以第二條以後都只要找前一條的前後 5 度中，重合最多的一點就好了");
+            hint_1 = true;
+        }
         for (i = 1; i < i_limit; i ++) {
             angle = (angle_base ? angle_base : 0) + Math.floor(i / 2) / boost * (i % 2 ? 1 : -1);
 
@@ -215,8 +223,16 @@ var step_4 = function(max_point) {
         ctx.lineTo(max_points[1][0], max_points[1][1]);
         ctx.strokeStyle = 'red';
         ctx.stroke();
-        alert("以角度 " + angle_base + " 找到一條");
+        if (hint_2 < 5) {
+            alert("以角度 " + angle_base + " 找到一條");
+            if (hint_2 == 4) {
+                alert("後面的線條就省略不 alert 了");
+            }
+            hint_2 ++;
+        }
     }
+    alert("這樣就找到所有的水平線了!");
+    alert("TODO: 接下來還要 demo 找垂直線(其實作法跟水平線一模一樣)，以及有的很接近的水平線，要怎麼歸類在同一條線，以及最後用所有水平線和垂直線算出交點");
 };
 
 step_1();

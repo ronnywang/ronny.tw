@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="container">
+    <h1>ronny.tw/data</h1>
     這幾年收集整理了很多資料，做了很多平台，但是常常到後來自己都忘了有收集過哪些資料，因此打算把做過的東西都放在這邊
     <h1>平台</h1>
     <div class="panel panel-default">
@@ -16,43 +17,54 @@
     <h3>台灣公司資料</h3>
     <a href="http://company.g0v.ronny.tw">company.g0v.ronny.tw</a>
     <p>資料來源為 <a href="http://gcis.nat.gov.tw/welcome.jsp">經濟部全國商工行政服務入口網</a> ，更新頻率為每個月一次，包含全台灣公司名單營業項目、資本額、董監事名單，以及台灣各商號資料等</p>
-
+    <hr>
     <h3>台灣公司關係圖</h3>
+    <img src="images/company-graph.jpg" width="500"><br>
     <a href="http://company-graph.g0v.ronny.tw">company-graph.g0v.ronny.tw</a>
     <p>將台灣公司資料的公司以董監事名單連結起來，只要輸入統一編號就可以看到以該公司為中心的公司關係圖</p>
 
+    <hr>
     <h3>關務署進出口資料整理</h3>
+    <img src="images/portal.png" width="500"><br>
     <a href="http://portal.g0v.ronny.tw">portal.g0v.ronny.tw</a>
     <p>來自經濟部關務署的所有進出口貨物的進口出口國家、貨物項目申報的重量以及價值資料，以月為單位，並且有畫成圖表可以看出歷史的變化，資料從 2003 年開始，更新頻率為每個月</p>
 
+    <hr>
     <h3>PTT熱門記錄</h3>
     <a href="http://ptthot.ronny.tw">ptthot.ronny.tw</a>
     <p>從 2011/11 開始收集每五分鐘抓取PTT熱門看板人氣數字，並記錄當時的板名，可以看出 PTT 各看板在各社會事件的人氣變化</p>
 
+    <hr>
     <h3>NewDiff</h3>
     <a href="http://newsdiff.g0v.ronny.tw">newsdiff.g0v.ronny.tw</a>
     <p>從 2013/8 開始收集各網路媒體的新聞內容，並且追蹤是否有被刪除或是內容修改，以方便研究新聞修改原因，持續自動更新中</p>
 
+    <hr>
     <h3>NewsTrend</h3>
     <a href="http://newstrend.g0v.ronny.tw">newstrend.g0v.ronny.tw</a>
     <p>利用 NewsDiff 資料做的服務，可以輸入關鍵字，搜尋該關鍵字在各媒體出現的歷史記錄，以方便分析各媒體的新聞偏好以及事件的關注度</p>
 
+    <hr>
     <h3>歷史四大報頭條</h3>
     <a href="http://oldpaper.g0v.ronny.tw">oldpaper.g0v.ronny.tw</a>
     <p>收集 2011/11 開始的每日四大報頭條新聞，以方便研究時事記錄以及研究媒體偏好</p>
 
+    <hr>
     <h3>台電發電量歷史記錄</h3>
     <a href="http://taipower.g0v.ronny.tw/">taipower.g0v.ronny.tw</a>
     <p>每十分鐘收集台電各種發電量數字，畫出歷史趨勢圖</p>
 
+    <hr>
     <h3>台北市建築執照記錄</h3>
     <a href="http://tpebuilding.g0v.ronny.tw/?year=102">tpebuilding.g0v.ronny.tw</a>
     <p>收集台北市從民國 38 年到 102 年的建築使用執照掃描本，目前資料沒有再更新，正在處理其他來源希望可能直接針對全台灣資料做處理</p>
 
+    <hr>
     <h3>政治獻金切豆腐</h3>
     <a href="http://campaign-finance.g0v.ronny.tw">campaign-finance.g0v.ronny.tw</a>
     <p>利用影像處理將政治獻金的掃描圖檔抓出框線並切出每一個格子，並接力將每一格丟給 @ctiml 做的 http://campaign-finance.g0v.ctiml.tw/ 利用群眾外包來將掃描文件 OCR 出來</p>
 
+    <hr>
     <h3>GitHub GeoJSON 地圖產生器</h3>
     <a href="http://github.ronny.tw">github.ronny.tw</a>
     <p>將 CSV 或是 GeoJSON 丟到 Github 之後，只需要把網址的 github.com 改成 github.ronny.tw 就可以直接瀏覽結果，因為 Github 是用 js 在瀏覽器畫出來，資料有 1MB 的限制， github.ronny.tw 是在 server 端畫好以 WMS 型式傳回來，因此資料無限制</p>
@@ -67,14 +79,17 @@
     <a href="http://jobhelper.g0v.ronny.tw">jobhelper.g0v.ronny.tw</a>
     <p>收集各縣市違反勞基法公司名錄，並且做成 Chrome Extension ，讓使用者安裝之後，只要在瀏覽 104, 1111, 518, yes123 等人力銀行時，只要該公司在違法名單中就會跳出警告</p>
 
+    <hr>
     <h3>新聞小幫手</h3>
     <a href="http://newshelper.g0v.ronny.tw">newshelper.g0v.ronny.tw</a>
     <p>針對 Facebook 的瀏覽器外掛，當塗鴉牆上分享的連結被人回報是有誤的新聞時，會跳出警告這是有害新聞。當你之前看過的新聞被人回報有誤時，也會跳出警告說你前幾日看的哪則新聞剛剛被人回報，避免錯誤的資訊被流傳。</p>
 
+    <hr>
     <h3>斧頭幫大挑戰</h3>
     <a href="http://axe.g0v.tw">axe.g0v.tw</a>
     <p>提供幾種常見的網頁型式，讓想寫 Crawler 的人可以練習看看爬資料</p>
 
+    <hr>
     <h3>腿新聞 LagNews</h3>
     <a href="https://www.facebook.com/lagnews.tw?fref=ts">Facebook粉絲頁</a>
     <p>LagNews 腿新聞，每日中午十二點推出，最不即時保證遲到30天才來的新聞，讓你複習看看是否還記得30天前台灣發生什麼<br>
@@ -91,38 +106,47 @@
     <h1>資料整理</h1>
     <div class="panel panel-default">
           <div class="panel-body">
+    <hr>
     <h3>台北市門牌整理</h3>
     <a href="https://www.google.com/fusiontables/DataSource?docid=1aoRYsCJrFkPzrSJ-oeJU6fYfgDPMuk--RYr6cL4#map:id=3">Fusion Table</a>
     <p>從 <a href="http://www.houseno.tcg.gov.tw">台北市政府民政局 門牌整合檢索系統</a> 爬下來的台北市門牌資料，一共有 27 萬個門牌和經緯度座標，這個資料是民政局人員人工測量的，因此比 Google Map 的座標更準確，座標是在門牌所在的位置上，例如那種一棟有 40 戶的社區，他的座標也是訂在各自門牌上而不是訂在馬路邊的門口</p>
 
+    <hr>
     <h3>台灣工廠資料</h3>
     <a href="https://www.google.com/fusiontables/DataSource?docid=14exr8pYq9c9gNZ1CkM65S8quyVXaVxyIjHZ0D5k">Fusion Table</a>
     <p>2013/4/26 爬的工廠資料，當時有將寫爬蟲的過程實況播出，目前錄影在 <a href="https://www.youtube.com/watch?v=EbAmjXDnqHE">YouTube</a> 上面</p>
 
+    <hr>
     <h3>台北市 open data geojson 整理</h3>
     <a href="http://github.com/ronnywang/data.taipei.gov.tw/">GitHub</a> <a href="http://github.ronny.tw/ronnywang/data.taipei.gov.tw/tree/master/geo">github.ronny.tw</a>
     <p>將 data.taipei.gov.tw 上面地理相關的資料，無論是用 Big5, UTF-8 或是 TWD67, TWD97 座標的都統一轉換成經緯度的 GeoJSON，不定期會更新</p>
 
+    <hr>
     <h3>台灣建築執照整理</h3>
     <a href="https://github.com/ronnywang/cpabm.cpami.gov.tw">GitHub</a>
     <p>從 全國建築管理資訊系統 爬下來的全台灣建築執照名單，目前資料更新時間為 2013/12 ，之後會把這些資料做成一個定期更新的可以查詢的平台</p>
 
+    <hr>
     <h3>台灣鄉鎮村里家戶用電量</h3>
     <a href="https://github.com/ronnywang/ecolife.epa.gov.tw">GitHub</a>
     <p>從 <a href="http://ecolife.epa.gov.tw/default.aspx">EcoLife清淨家園顧厝邊綠色生活網</a> 爬下來的鄉鎮和村里用電量資料，每月自動更新一次</p>
         
+    <hr>
     <h3>台北市開放空間</h3>
     <a href="https://github.com/ronnywang/taipei-open-space">GitHub</a> <a href="http://github.ronny.tw/ronnywang/taipei-open-space/blob/master/geojson.json">github.ronny.tw</a>
     <p>從 <a href="http://www.dba.tcg.gov.tw/lp.asp?ctNode=32471&CtUnit=17548&BaseDSD=7&mp=118021">台北市建管處開放空間專區</a> 抓取的 84年至99年間核發之建造執照涉有開放空間現已完工之建案名冊 轉換成 GeoJSON 的資料 </p>
 
+    <hr>
     <h3>台灣地名由來地圖</h3>
     <a href="http://github.ronny.tw/ronnywang/sandbox/blob/master/20131218/road.latlng.json">github.ronny.tw</a>
     <p>從 <a href="http://data.gov.tw/node/7063">臺灣地區地名資料</a> 將資料依經緯度畫在地圖上面</a></p>
 
+    <hr>
     <h3>國土測繪圖資網路地圖服務地標資訊</h3>
     <a href="https://github.com/ronnywang/maps.nlsc.gov.tw/tree/master/landmark">GitHub</a> <a href="http://github.ronny.tw/ronnywang/maps.nlsc.gov.tw/blob/master/landmark/landmark.csv">CSV</a> <a href="http://github.ronny.tw/ronnywang/sandbox/blob/master/20131115/github-map-1.json">github.ronny.tw 地圖呈現</a>
     <p> 從 <a href="http://maps.nlsc.gov.tw">國土測繪圖資網路地圖</a> 中抓出來的五萬多筆地標的資訊</p>
 
+    <hr>
     <h3>碧潭吊橋都更範圍和劃定古蹟範圍</h3>
     <a href="https://github.com/ronnywang/sandbox/tree/master/20130805">GitHub</a>
     <p>碧潭吊橋原先因為墩座被劃定為都更範圍需要移動而引發公民團體抗議，之後成功爭取到被劃定為古蹟，這邊收集了新聞稿中以及都更書提到的兩個範圍的地號，產生出了 GeoJSON 可以在地圖上比較範圍</p>
@@ -138,18 +162,22 @@
     <p>結合 <a href="http://tpebuilding.g0v.ronny.tw">台北市建築執照記錄</a> 以及 <a href="https://www.google.com/fusiontables/DataSource?docid=1aoRYsCJrFkPzrSJ-oeJU6fYfgDPMuk--RYr6cL4#map:id=3">台北市門牌整理</a> 資料，依建築執照號碼判斷年齡，畫出台北市的建築物年齡地圖</p>
 
 
+    <hr>
     <h3>平均家戶用電</h3>
     <a href="http://github.ronny.tw/ronnywang/sandbox/blob/master/20131115/github-map-2.json#24.16207980483898,120.10901534445497,7">2013年平均家戶用電</a>
     <p>組合 <a href="https://github.com/ronnywang/ecolife.epa.gov.tw/blob/master/avg-2013.csv">ecolife.epa.gov.tw 的 2013 年家戶用電數</a> 與 <a href="https://github.com/ronnywang/twgeojson/blob/master/twtown2010.json">2010台灣鄉鎮市區界圖</a> 組合的用電變化地圖</p>
 
+    <hr>
     <h3>台灣總統大選藍綠地圖</h3>
     <a href="http://github.ronny.tw/ronnywang/sandbox/blob/master/20131126/2012-president-color.json">2012總統大選藍綠地圖</a>
     <p> 將 <a href="https://github.com/ronnywang/sandbox/blob/master/20131126/2012president-bluegreen.csv">藍綠比例CSV</a> 和 <a href="https://github.com/ronnywang/twgeojson/blob/master/twvillage2010.json">2010台灣村里界圖</a>(<a href="http://github.ronny.tw/ronnywang/twgeojson/blob/master/twvillage2010.json">github.ronny.tw</a>) 組合成藍綠地圖</p>
 
+    <hr>
     <h3>台灣人口密度地圖</h3>
     <a href="http://github.ronny.tw/ronnywang/sandbox/blob/master/20131212/2012-09-human.json#25.037553192057068,121.54857708885311,12">2012/9 人口密度</a> <a href="http://github.ronny.tw/ronnywang/sandbox/blob/master/20131212/2013-09-human.json#25.037553192057068,121.54857708885311,12">2013/9 人口密度</a>
     <p>因為看到 <a href="https://zh-tw.facebook.com/PanSci/photos/a.619714594759555.1073741827.114408138623539/625590767505271/?type=1&permPage=1">PanSci 臉書</a> 上面有分享一張 倫敦各區的人口密度 ，因此我拿了台灣的資料做了一個台灣版的</p>
 
+    <hr>
     <h3>50 天 50 張選舉圖表</h3>
     <a href="http://ronnywang.pixnet.net/blog/post/41522086">20141014 關於全台灣現任村里長的幾個地圖圖表</a>
     <p><a href="http://muyueh.com/">muyueh</a> 發起的 50 天 50 張選舉圖表活動，我也認領了七張圖，這邊會陸續增加</p>

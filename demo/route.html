@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<style>
+html, body, #map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px
+}
+</style>
+<title>5284公車</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.css">
+</head>
+<body>
+<form method="get" id="form">
+    公車ID: <input type="text" name="route_id">
+    <button type="submit">查詢</button>
+</form>
+<script>
+var map;
+function initialize() {
+    map = new google.maps.Map(document.getElementById('map-canvas'), {
+zoom: 4,
+center: {lat: -28, lng: 137.883}
+});
+
+var marker_click = function(){
+};
+
+var items = [];
+$('#form').submit(function(e){
+    e.preventDefault();
+    
+    for (var i = 0; i < items.length; i ++) {
+        delete(items[i]);
+    }
+    items = [];
+
+    var route_id = parseInt($('[name="route_id"]').val());
+    var route_url = 'https://sheethub.com/wms?Request=GetGeoJSON&Layers=5284.taipei.gov.tw/Route%E8%B7%AF%E7%B7%9A&sql=SELECT+%2A+FROM+%225284.taipei.gov.tw%2FRoute%E8%B7%AF%E7%B7%9A%22+WHERE+route_id%3D' + route_id;
+    $.get(route_url, function(json){
+        var ret = map.data.addGeoJson(json);
+
+        items.push(ret[0]);
+
+        var bounds = new google.maps.LatLngBounds();
+        ret[0].getGeometry().getArray().map(function(item){ bounds.extend(item); });
+        map.fitBounds(bounds);
+
+    }, 'json');
+
+    var stop_url = 'https://sheethub.com/5284.taipei.gov.tw/Stop?sql=SELECT+%2A+FROM+%225284.taipei.gov.tw%2FStop%22+WHERE+routeId%3D' + route_id + '&format=array_json';
+    $.get(stop_url, function(json){
+            for (var i = 0; i < json.length; i ++) {
+            var stop = json[i];
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(stop.showLat, stop.showLon),
+                map: map,
+            });
+            marker.setOpacity(0.5);
+            color = 'FF0000';
+            if (parseInt(stop.goBack)) {
+                color = '0000FF';
+            }
+            marker.setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + parseInt(stop.seqNo) + '|' +color + '|000000');
+            google.maps.event.addListener(marker, 'click', marker_click);
+            }
+    }, 'json');
+});
+
+// [START snippet-style]
+// Set the stroke width, and fill color for each polygon
+var featureStyle = {
+fillColor: 'green',
+       strokeWeight: 1
+}
+map.data.setStyle(featureStyle);
+// [END snippet-style]
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+<div id="map-canvas"></div>
+</body>
+</html> 

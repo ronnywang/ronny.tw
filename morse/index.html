@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Morse Code Calculator</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <p>Morse: <span id="morse"></span></p>
+    <p>Input: <span id="input"></span></p>
+    <p>Result: <span id="result"></span></p>
+    <p>Warning: <span id="warning"></span></p>
+<pre>
+"a": ".-"(+),    "b": "-..."(-),  "c": "-.-."(*),  "d": "-.."(/),
+"e": "."(=),     "f": "..-.",  "g": "--.",   "h": "....",
+"i": "..",    "j": ".---",  "k": "-.-",   "l": ".-..",
+"m": "--",    "n": "-.",    "o": "---",   "p": ".--.",
+"q": "--.-",  "r": ".-.",   "s": "...",   "t": "-",
+"u": "..-",   "v": "...-",  "w": ".--",   "x": "-..-",
+"y": "-.--",  "z": "--..", 
+
+"1": ".----", "2": "..---", "3": "...--", "4": "....-", "5": ".....",
+"6": "-....", "7": "--...", "8": "---..", "9": "----.", "0": "-----",
+</pre>
+</div>
+<script>
+var vibrate;
+var status = 'wait';
+
+$(function(){
+    var code = {
+	  "a": ".-",    "b": "-...",  "c": "-.-.",  "d": "-..",
+	  "e": ".",     "f": "..-.",  "g": "--.",   "h": "....",
+	  "i": "..",    "j": ".---",  "k": "-.-",   "l": ".-..",
+	  "m": "--",    "n": "-.",    "o": "---",   "p": ".--.",
+	  "q": "--.-",  "r": ".-.",   "s": "...",   "t": "-",
+	  "u": "..-",   "v": "...-",  "w": ".--",   "x": "-..-",
+	  "y": "-.--",  "z": "--..", 
+
+	  "1": ".----", "2": "..---", "3": "...--", "4": "....-", "5": ".....",
+	  "6": "-....", "7": "--...", "8": "---..", "9": "----.", "0": "-----",
+    };
+    var code_map = {};
+    for (var result in code) {
+	code_map[code[result]] = result;
+    }
+    var time = null;
+
+    var touch_start = function(e){
+	e.preventDefault();
+	time = (new Date()).getTime();
+	status = 'down';
+    };
+
+    var touch_end = function(e){
+	if (status != 'down') return;
+	var delta = (new Date()).getTime() - time;
+	status = 'up';
+	time = (new Date()).getTime();
+
+	if (delta > 500) {
+	    $('#morse').text($('#morse').text() + '-');
+	    window.navigator.vibrate([500]);
+	} else {
+	    $('#morse').text($('#morse').text() + '.');
+	    window.navigator.vibrate([100]);
+	}
+    };
+
+    $(window).bind('touchstart', touch_start);
+    $(window).bind('mousedown', touch_start);
+    $(window).bind('touchend', touch_end);
+    $(window).bind('mouseup', touch_end);
+
+
+    op_map = {'a': '+', 'b': '-', 'c' : '*', 'd': '/'};
+
+    var time_interval = function(){
+	if (status == 'up') {
+	    var delta = (new Date()).getTime() - time;
+	    if (delta > 1000) {
+		var t = $('#morse').text();
+		if ('undefined' !== typeof(code_map[t])) {
+		    var r = code_map[t];
+		    if (r.match(/^[^0-9a-e]$/)) {
+			$('#warning').text('only support 0-9 + - * /');
+		    } else {
+			if (r.match(/[a-d]/)) {
+			    $('#input').append(op_map[r]);
+			} else if (r == 'e') {
+			    result = '' + eval($('#input').text());
+			    $('#result').text(result);
+			    $('#input').text('');
+			    var vibrate = [];
+			    for (var i = 0; i < result.length; i ++) {
+				c = code[result.substr(i, 1)];
+				for (var j = 0; j < c.length; j ++) {
+				    if (c[j] == '-') {
+					vibrate.push(500);
+				    } else {
+					vibrate.push(100);
+				    }
+				    if (j == c.length - 1) {
+					vibrate.push(1000);
+				    } else {
+					vibrate.push(500);
+				    }
+				}
+			    }
+			    $('#warning').text('wait more click for vibrate');
+			    window.navigator.vibrate(vibrate);
+			} else {
+			    $('#input').append(code_map[t]);
+			}
+		    }
+		} else {
+		    $('#warning').text("Don't know " + t);
+		}
+		status = '';
+		$('#morse').text('');
+	    }
+	}
+	setTimeout(time_interval, 100);
+    };
+    time_interval();
+});
+</script>
+</body>
+</html>

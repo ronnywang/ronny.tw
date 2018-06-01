@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>20140623 聯合報課程</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.css">
+</head>
+<body>
+<a href="https://docs.google.com/presentation/d/112uI6o0RW-zeM7FjEWVN3x4SULbjpbDrQKd4IJLLQe4/edit?usp=sharing">投影片</a>
+<h3>參考連結</h3>
+<h3>[1] 成績單 範例</h3>
+資料來源: <a href="http://axe.g0v.tw">axe.g0v.tw</a><br>
+Google Spreadsheet 函式列表: <a href="https://support.google.com/docs/table/25273?hl=zh-Hant">https://support.google.com/docs/table/25273?hl=zh-Hant</a><br>
+數學    SUM     SUM(值_1, 值_2)  傳回一連串數字或儲存格的總和。 <a href="https://support.google.com/docs/answer/3093669">瞭解詳情</a><br>
+統計    AVERAGE AVERAGE(值_1, 值_2)      傳回資料集的數字平均值 (忽略文字)。 <a href="https://support.google.com/docs/answer/3093615">瞭解詳情</a><br>
+統計    RANK    RANK(值, 資料, 遞增)     傳回資料集中指定值的排名。 <a href="https://support.google.com/docs/answer/3094098">瞭解詳情</a><br>
+數學    COUNTIF COUNTIF(範圍, 條件)      傳回範圍內符合條件的項目數量。 <a href="https://support.google.com/docs/answer/3093480">瞭解詳情</a><br>
+<h4>座標規則</h4>
+<ol>
+    <li>一格: B3 </li>
+    第 B 行第 3 列
+    <li>範圍: B3:C4 </li>
+    B3 到 C4 之間的 2x2 格的範圍
+    <li>範圍: B3:B </li>
+    B 整列的資料，去掉 B3 之前的值 (通常用在 B1, B2 是欄位名稱的情況)
+    <li>範圍: B3:C </li>
+    B, C 整列的資料，去掉 B3, C3 之前的值
+    <li>一格: B$3 </li>
+    第 B 行第 3 列，而且將這格複製到其他格時，B 會跟著平移，但是 3 會固定住
+    <li>一格: $B$3 </li>
+    第 B 行第 3 列，而且將這格複製到其他格時， B 和 3 都會固定住
+</ol>
+<h3>[2] 出遊分錢範例</h3>
+陣列    SUMPRODUCT      SUMPRODUCT(陣列_1, 陣列_2)       針對兩個大小相同的陣列或範圍，計算彼此對應項目的乘積總和。 <a href="https://support.google.com/docs/answer/3094294">瞭解詳情</a>
+<br>
+<a href="https://docs.google.com/spreadsheet/ccc?key=0AvCxAZD9rYXMdEJ1b3NSWlU4RWladWJha0U2MmZscmc&usp=drive_web#gid=3">2013年我的金門出遊分錢表</a>
+<h3>[3] 團購記錄</h3>
+李雅婷發現有一家網路蛋糕店的蛋糕店很好吃，想要找同事一起團購，於是開了一個 Spread Sheet 想要讓同事一起登記想訂的東西，這家蛋糕店有三樣東西可以訂購，分別是 巧克力蛋糕500, 奶油蛋糕400, 重乳酪蛋糕600，現在的需求是要做出一個 SpreadSheet 讓同事可以來登記想要哪個蛋糕各幾份，就幫他算出需要付的錢及數量，並幫李雅婷計算總共需要付多少錢給店家。
+<h3>[4] 縣市男女比例</h3>
+<a href="http://segis.moi.gov.tw/STAT/Web/Portal/STAT_PortalHome.aspx">社會經濟資料庫</a><br>
+<a href="moi.gov.zip">2014/3 縣市行政區人口統計資料</a><br>
+<a href="U01CO_103Y3M_TW.csv">解壓縮後的 U01CO_103Y3M_TW.csv</a>
+<h3>[5] 全國區長資料</h3>
+<a href="http://data.gov.tw/">data.gov.tw</a> 搜尋「區長」<br>
+<a href="http://data.gov.tw/node/7060">區長 |  政府資料開放平臺</a><br>
+<a href="http://cand.moi.gov.tw/of/ap/cand3_json.jsp?electkind=0800000">資料位置: http://cand.moi.gov.tw/of/ap/cand3_json.jsp?electkind=0800000</a>備份: <a href="village.json">village.json</a><br>
+<a href="http://www.convertcsv.com/json-to-csv.htm">JSON 轉成 CSV 工具</a><br>
+</body>
+</html>

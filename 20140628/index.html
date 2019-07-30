@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>20140628 聯合報課程</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.css">
+</head>
+<body>
+<a href="/20140622/">2014/6/22 課程參考資料</a>
+<h2>參考 Google 試算表函式</h2>
+Google Spreadsheet 函式列表: <a href="https://support.google.com/docs/table/25273?hl=zh-Hant">https://support.google.com/docs/table/25273?hl=zh-Hant</a><br>
+<ol>
+    <li>數學    SUM     SUM(值_1, 值_2)  傳回一連串數字或儲存格的總和。 <a href="https://support.google.com/docs/answer/3093669">瞭解詳情</a></li>
+    <li>數學        SUMIF   SUMIF(範圍, 條件, 加總範圍)      傳回範圍內符合條件的項目總和。 <a href="https://support.google.com/docs/answer/3093583">瞭解詳情</a></li>
+    <li>數學    COUNTIF COUNTIF(範圍, 條件)      傳回範圍內符合條件的項目數量。 <a href="https://support.google.com/docs/answer/3093480">瞭解詳情</a></li>
+    <li>統計        COUNT   COUNT(值_1, 值_2)        傳回資料集中的數值個數。 <a href="https://support.google.com/docs/answer/3093620">瞭解詳情</a></li>
+</ol>
+<h4>座標規則</h4>
+<ol>
+    <li>一格: B3 </li>
+    第 B 行第 3 列
+    <li>範圍: B3:C4 </li>
+    B3 到 C4 之間的 2x2 格的範圍
+    <li>範圍: B3:B </li>
+    B 整列的資料，去掉 B3 之前的值 (通常用在 B1, B2 是欄位名稱的情況)
+    <li>範圍: B3:C </li>
+    B, C 整列的資料，去掉 B3, C3 之前的值
+    <li>一格: B$3 </li>
+    第 B 行第 3 列，而且將這格複製到其他格時，B 會跟著平移，但是 3 會固定住
+    <li>一格: $B$3 </li>
+    第 B 行第 3 列，而且將這格複製到其他格時， B 和 3 都會固定住
+</ol>
+<br>
+<h3>[1] 全國村里長資料</h3>
+<a href="http://data.gov.tw/">data.gov.tw</a> 搜尋「村里長」<br>
+<a href="http://data.gov.tw/node/7061">村里長 |  政府資料開放平臺</a><br>
+<a href="http://cand.moi.gov.tw/of/ap/cand2_json.jsp?electkind=0700000">資料位置: http://cand.moi.gov.tw/of/ap/cand2_json.jsp?electkind=0700000</a> 備份: <a href="village.json">village.json</a><br>
+<a href="http://www.convertcsv.com/json-to-csv.htm">JSON 轉成 CSV 工具</a><br>
+<ol>
+    <li>統計        COUNTA  COUNTA(值_1, 值_2)       傳回資料集中值的個數。 <a href="https://support.google.com/docs/answer/3093991">瞭解詳情</a></li>
+    <li>篩選器      FILTER  FILTER(範圍, 條件_1, 條件_2)     傳回來源範圍的篩選後版本，只傳回符合指定條件的資料列或資料欄。 <a href="https://support.google.com/docs/answer/3093197">瞭解詳情</a></li>
+    <li>篩選器      UNIQUE  UNIQUE(範圍)     傳回來源範圍中的不重複資料列，忽略重複資料列。系統會按照這些列在來源範圍中第一次出現的順序來傳回資料列。 <a href="https://support.google.com/docs/answer/3093198">瞭解詳情</a></li>
+    <li>數學        COUNTIFS        COUNTIFS(標準範圍_1, 標準_1, [標準範圍_2, 標準_2, ...])  傳回根據多個條件而得出的範圍大小。僅適用於 新版 Google 試算表。<a href="https://support.google.com/docs/answer/3256550">瞭解詳情</a></li>
+    <li>陣列        TRANSPOSE       TRANSPOSE(陣列或範圍)    將陣列或儲存格範圍的列與行移項。 <a href="https://support.google.com/docs/answer/3094262">瞭解詳情</a></li>
+
+</ol>
+<h3>[2] 地震轉換原子彈練習</h3>
+<a href="https://docs.google.com/spreadsheets/d/1T-nnlz0zw5kTWjmHGYr4i7T5_LZkdTZ-d7Ho1Uo0Vic/edit#gid=1911782565">中央氣象局歷史地震記錄</a><br>
+<code>原子彈數 = pow(pow(2, 0.5), 地震規模 * 10) / 2147483648</code>
+<h3>[3] 鄉鎮家戶用電量練習</h3>
+<a href="http://ecolife.epa.gov.tw/Cooler/effect/Electricity_Area.aspx">環保署綠色生活網</a><br>
+<a href="https://github.com/ronnywang/ecolife.epa.gov.tw/blob/master/outputs/town/2013-7.csv">2013 七月鄉鎮家用電量</a><br>
+<a href="https://github.com/ronnywang/ecolife.epa.gov.tw/blob/master/outputs/town/2013-8.csv">2013 八月鄉鎮家用電量</a><br>
+<a href="http://segis.moi.gov.tw/STAT/Web/Portal/STAT_PortalHome.aspx">社會經濟資料庫</a><br>
+社會經濟資料庫共通平台 →登入 → 點選「人口概況」→拉到下面選取「行政區人口統計」「全國」「鄉鎮市區」「102年9月」<br>
+<a href="U01TO_102Y9M_TW.csv">已下載版本</a><br>
+<ol>
+<li>查詢        VLOOKUP VLOOKUP(搜尋準則, 範圍, 索引, 已排序)    垂直查詢。縱向搜尋特定範圍中的第一欄是否有指定準則，並將找到的資料列中指定儲存格的值傳回。 <a href="https://support.google.com/docs/answer/3093318">瞭解詳情</a></li>
+</ol>
+PS: 注意， VLOOKUP 一定要把查詢的欄位放在第一格<br>
+<h3>[3] 試算表練習</h3>
+<h4>1. 假如今天只有村里家戶數資料，可以透過 UNIQUE & SUMIF 兩個 function 得出鄉鎮家戶數資料嗎? </h4>
+<a href="U01VI_103Y3M_TW.csv">103/3 村里家戶數資料</a>
+<h4>2. 把村里人口數跟村里長資料用 VLOOKUP 結合，來看看各政黨總共管了多少里民吧!</h4>
+<hr>
+<h1>地理資訊視覺呈現</h1>
+<a href="https://docs.google.com/presentation/d/1iz8t9R-kWDPLcMljO44-fMjYonmPmqt02l-fmleNFdI/edit?usp=sharing">投影片</a><br>
+EPSG 代號<br>
+<ol>
+    <li><a href="http://epsg.io/3824">3824</a> TWD97</li>
+    <li><a href="http://epsg.io/3825">3825</a> TWD97:119 (金馬地區)</li>
+    <li><a href="http://epsg.io/3826">3826</a> TWD97:121 (台灣本島)</li>
+    <li><a href="http://epsg.io/3827">3827</a> WD67:119 (澎湖)</li>
+    <li><a href="http://epsg.io/3828">3828</a> TWD67:121 (台灣本島)</li>
+    <li><a href="http://epsg.io/4826">4826</a> WGS84 經緯度</li>
+</ol>
+<h3>Fusion Table 1. 放射性污染之虞建築物</h3>
+<a href="https://www.google.com/fusiontables/data?docid=1wKC_NzIUub_V85VeKVWWaFGJ96Q_4hc70sSJ-t8#rows:id=1">有遭受放射性污染之虞建築物清冊地圖 Fusion Table</a><br>
+<a href="http://www.aec.gov.tw/newsdetail/board/1054.html">「有遭受放射性污染之虞」之建築物清冊 - 行政院原子能委員會全球資訊網</a>
+<h3>Fusion Table 2. 純粹DEMO - 台北市門牌資料</h3>
+<a href="https://www.google.com/fusiontables/DataSource?docid=1Dz88qA0OpksNHcl5ShNeeY1x4_dmnUQG_VO-P4s#map:id=4">台北市門牌地圖</a><br>
+<a href="http://www.houseno.tcg.gov.tw/">資料來源: 臺北市政府民政局門牌整合檢索系統</a>
+<h3>Fusion Table 3. 處理經緯度資料 - 台南市餐飲資料</h3>
+<a href="http://data.gov.tw/node/6184">臺南餐飲</a>
+<h3>Fusion Table 4. 全台民宿地圖</h3>
+<a href="https://github.com/ronnywang/sandbox/blob/master/20131203/villas.csv">民宿列表</a><br>
+<h3>Fusion Table 5. KMZ to KML</h3>
+<a href="http://data.gov.tw/node/6385">台灣本島焚化爐煙囪的地理位置</a><br>
+<h3>CartoDB</h3>
+<a href="http://cartodb.com">CartoDB</a><br>
+<a href="https://ronnywang.cartodb.com/tables/taipei/public">台北市城市年齡地圖</a><br>
+<a href="http://dongpo.cartodb.com/tables/earthquake/public">東南亞地震分布地圖 By DongPo</a><br>
+<h3>TargetMap</h3>
+<a href="http://www.targetmap.com">TargetMap</a><br>
+<a href="http://www.targetmap.com/viewer.aspx?reportId=3073">全球罩杯地圖</a><br>
+<h3>SafeTaiwan</h3>
+<a href="https://www.safetaiwan.tw/index.html">www.safetaiwan.tw</a>
+<h3>QGIS 1. WMS 練習，經濟部中央地質調查所地質 WMS</h3>
+<a href="http://gis.moeacgs.gov.tw/wmslr/wms.cfm">http://gis.moeacgs.gov.tw/wmslr/wms.cfm</a><br>
+<h3>QGIS 2. 圖資匯入 全國村里界圖</h3>
+<a href="http://tgos.nat.gov.tw/TGOS/Web/MapData/TGOS_MapInfo.aspx?code=TW-07-301000100G-000001_20120720151415">地理資訊圖資雲服務平台</a><br>
+<h3>QGIS 3. 圖資匯入 全國鄉鎮界圖</h3>
+<a href="https://www.dropbox.com/s/9r02har3nvkx5fg/100%E5%B9%B4%E5%85%A8%E5%9C%8B%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80%E7%95%8C%E5%9C%96.zip">全國鄉鎮界圖</a><br>
+<h3>QGIS 4. 匯入 CSV 資料</h3>
+<h4>男女比例地圖</h4>
+<h4>人口密度地圖(用離散配色)</h4>
+<h3>QGIS 4. 匯入含經緯度 CSV</h3>
+<a href="https://www.google.com/fusiontables/DataSource?docid=1vH3iw8TMjZUXhu7iRBWDVjk8_Sxs7qV-94BcPIw#rows:id=1">台北市建築使用執照</a><br>
+<h3>QGIS 練習 畫出鄉鎮家戶耗電地圖</h3>
+<h3>QGIS 練習 畫出台灣總統大選藍綠地圖</h3>
+<a href="https://github.com/ronnywang/sandbox/blob/master/20131126/2012president-bluegreen.csv">2012 年已整理過總統大選各村里開票結果</a><br>
+參考資料: <a href="https://www.ptt.cc/bbs/Gossiping/M.1399890187.A.BF2.html">PTT [情報] 割闌尾行動各里成功率分析</a>
+</body>
+</html>

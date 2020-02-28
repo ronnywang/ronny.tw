@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>揪松小幫手</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css">
+    <script src="https://meet.jit.si/libs/lib-jitsi-meet.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <h1>
+        <input type="text" id="title" value="g0v 線上黑客松-次頻道1" style="width: 100%">
+    </h1>
+    <div class="row">
+        <div class="col">
+            <form id="form">
+                頻道ID：<input type="text" name="room-id" value="g0v-test"><br>
+                自我介紹活動ID：<input type="text" name="intro-id" value="test"><br>
+                機器人名稱：<input type="text" name="robot-nick" value="揪松小幫手"><br>
+                <button type="submit">連上meet.jit.si</button><br>
+                （請先將此分頁獨立拉成一個視窗，連上後選擇分享「應用程式視窗」並選「揪松小幫手:<span id="room_id"></span>」）
+            </form>
+            <video autoplay="1" id="track-video" style="width: 100%; height: 500px;display: none"></video>
+        </div>
+        <div class="col">
+            <textarea name="event-desc" style="width: 100%; height: 300px; font-size: 25px">共筆連結：https://g0v.hackmd.io/g0v-hackath39n-hole-1
+歡迎來到「次頻道1」，這邊在討論「ooxx專案」
+若無 slack 帳號，可以至 https://join.g0v.tw/ 註冊帳號
+若未提供自我介紹，可至 https://intro.g0v.ronny.tw/ 自我介紹</textarea><br>
+            <div id="message"></div>
+        </div>
+    </div><!-- .row -->
+        <style>
+.member-area { position: absolute; left: 0px; top:500px; }
+#member-list { overflow: hidden; height: 200px; }
+.member-box { height: 200px; width: 128px; float: left; }
+.member-displayname { position: relative; top: 0px; left: 0px; height: 13px; }
+.member-talking { background-color: yellow; }
+        </style>
+    <div class="member-area">
+        <h3>成員名單</h3>
+        <script id="tmpl-member-box" type="text/html">
+            <div class="member-box">
+                <img src="" width="128" height="128">
+                <span class="member-displayname"></span>
+                <div class="member-intro"></div>
+            </div>
+        </script>
+        <div id="member-list">
+        </div>
+    </div>
+</div>
+</div>
+<script>
+/* global $, JitsiMeetJS */
+
+const options = {
+    hosts: {
+        domain: 'meet.jit.si',
+        muc: 'conference.meet.jit.si' // FIXME: use XEP-0030
+    },
+    bosh: '//meet.jit.si/http-bind', // FIXME: use xep-0156 for that
+
+    // The name of client node advertised in XEP-0115 'c' stanza
+    clientNode: 'http://jitsi.org/jitsimeet'
+};
+
+var confOptions = {
+    openBridgeChannel: true,
+    confID: 'g0v-test',
+};
+
+let connection = null;
+let isJoined = false;
+let room = null;
+
+let localTracks = [];
+videoTracks = {};
+
+/**
+ * Handles local tracks.
+ * @param tracks Array with JitsiTrack objects
+ */
+function onLocalTracks(tracks) {
+    localTracks = tracks;
+    for (let i = 0; i < localTracks.length; i++) {
+        if (localTracks[i].getType() === 'video') {
+            localTracks[i].attach($('#track-video')[0]);
+        }
+        if (isJoined) {
+            room.addTrack(localTracks[i]);
+        }
+    }
+}
+
+/**
+ * Handles remote tracks
+ * @param track JitsiTrack object
+ */
+function onRemoteTrack(track) {
+    if (track.isLocal()) {
+        return;
+    }
+    const participant = track.getParticipantId();
+
+    if (track.getType() === 'video') {
+        videoTracks[participant] = track;
+    }
+}
+
+/**
+ * That function is executed when the conference is joined
+ */
+var robot_nickname = '揪松小幫手';
+
+var add_message = function(type, params){
+    var dom = $('<div></div>').addClass('alert').attr('role', 'alert');;
+    if (type == 'newuser_withoutslack') {
+        dom.text(`新加入朋友 ${room.participants[params[0]]._displayName} ，但未能找到您的名稱的自我介紹，請至 https://intro.g0v.ronny.tw/event/show/${intro_id} 增加自我介紹，並將這邊的名稱改成與 slack 相同`);
+        dom.addClass('alert-primary');
+    } else if (type == 'welcome') {
+        var account = room.participants[params[0]]._displayName;
+        var info = user_info[account];
+        dom.addClass('alert-primary');
+        dom.append($('<img>').attr({width:64,height:64,src:info.avatar}));
+        dom.append($('<span></span>').text(`歡迎 @${account} 加入，自我介紹：${info.keyword}`));
+    }
+    $('#message').prepend(dom);
+    $('#message').scroll(0);
+};
+
+var update_member_list = function(){
+    $('.member-box').addClass('checking');
+    var new_user = {};
+    for (var id in room.participants) {
+        var participant = room.participants[id];
+        if (!$('#member-' + id).length) {
+            new_user[id] = {id: id};
+            var member_box = $($('#tmpl-member-box').html());
+            member_box.attr('id', `member-${id}`);
+            member_box.attr('title', `member-${id}`);
+            $('#member-list').append(member_box);
+        }
+        $(`#member-${id} .member-displayname`).text(participant._displayName);
+        $(`#member-${id}`).removeClass('checking');
+        if ('undefined' !== typeof(user_info[participant._displayName])) {
+            var info = user_info[participant._displayName];
+            $(`#member-${id} img`).attr('src', info.avatar);
+            $(`#member-${id} .member-intro`).text(info.keyword);
+            if ('undefined' !== typeof(new_user[id])) {
+                new_user[id].slack = true;
+            } else if ($(`#member-${id}`).is('no-intro')) {
+                new_user[id] = {slack: true};
+            }
+        } else {
+            $(`#member-${id} .member-intro`).text('未自介使用者');
+            $(`#member-${id}`).addClass('no-intro');
+            if ('undefined' !== typeof(new_user[id])) {
+                new_user[id].slack = false;
+            }
+        }
+    }
+    $('.member-box.checking').remove();
+    for (var id in new_user) {
+        if (new_user[id].slack == false) {
+            add_message('newuser_withoutslack', [id]);
+        } else {
+            add_message('welcome', [id]);
+        }
+    }
+};
+
+function onConferenceJoined() {
+    room.setDisplayName(robot_nickname);
+    isJoined = true;
+    for (let i = 0; i < localTracks.length; i++) {
+        room.addTrack(localTracks[i]);
+    }
+    update_member_list();
+    for (var id in room.participants) {
+        for (var track_id in room.participants[id].tracks) {
+            var track = room.participants[id].tracks[track_id];
+            if (track.getType() == 'video') {
+                videoTracks[id] = track;
+            }
+        }
+    }
+    room.on(JitsiMeetJS.events.conference.USER_JOINED, (id, user) => {
+        update_member_list();
+    });
+    room.on(JitsiMeetJS.events.conference.DOMINANT_SPEAKER_CHANGED, (id) => {
+        $('.member-box').removeClass('member-talking');
+        $(`#member-${id}`).addClass('member-talking');
+
+        if ('undefined' !== typeof(videoTracks[id])) {
+            videoTracks[id].attach($('#track-video')[0]);
+        }
+    });
+    room.on(JitsiMeetJS.events.conference.USER_LEFT, (id, user) => {
+        onUserLeft(id);
+        update_member_list();
+    });
+    room.on(JitsiMeetJS.events.conference.DISPLAY_NAME_CHANGED, (id, user) => {
+        update_member_list();
+    });
+    room.on(JitsiMeetJS.events.conference.MESSAGE_RECEIVED, (id, text, ts) => {
+    });
+}
+
+/**
+ *
+ * @param id
+ */
+function onUserLeft(id) {
+    if ('undefined' !== typeof(videoTracks[id])) {
+        videoTracks[id].detach($('#track-video')[0]);
+        delete(videoTracks[id]);
+    }
+}
+
+/**
+ * That function is called when connection is established successfully
+ */
+function onConnectionSuccess() {
+    room = connection.initJitsiConference(confOptions.confID, confOptions);
+    room.on(JitsiMeetJS.events.conference.TRACK_ADDED, onRemoteTrack);
+    room.on(JitsiMeetJS.events.conference.TRACK_REMOVED, track => {
+        console.log(`track removed!!!${track}`);
+    });
+    room.on(
+        JitsiMeetJS.events.conference.CONFERENCE_JOINED,
+        onConferenceJoined);
+    room.on(JitsiMeetJS.events.conference.TRACK_MUTE_CHANGED, track => {
+        console.log(`${track.getType()} - ${track.isMuted()}`);
+    });
+    room.join();
+}
+
+/**
+ * This function is called when the connection fail.
+ */
+function onConnectionFailed() {
+    console.error('Connection Failed!');
+}
+
+/**
+ * This function is called when we disconnect.
+ */
+function disconnect() {
+    connection.removeEventListener(
+        JitsiMeetJS.events.connection.CONNECTION_ESTABLISHED,
+        onConnectionSuccess);
+    connection.removeEventListener(
+        JitsiMeetJS.events.connection.CONNECTION_FAILED,
+        onConnectionFailed);
+    connection.removeEventListener(
+        JitsiMeetJS.events.connection.CONNECTION_DISCONNECTED,
+        disconnect);
+}
+
+function unload() {
+    for (let i = 0; i < localTracks.length; i++) {
+        localTracks[i].dispose();
+    }
+    room.leave();
+    connection.disconnect();
+}
+
+let isVideo = true;
+
+$(window).bind('beforeunload', unload);
+$(window).bind('unload', unload);
+
+JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels.ERROR);
+const initOptions = {
+    disableAudioLevels: true,
+
+    // The ID of the jidesha extension for Chrome.
+    desktopSharingChromeExtId: 'mbocklcggfhnbahlnepmldehdhpjfcjp',
+
+    // Whether desktop sharing should be disabled on Chrome.
+    desktopSharingChromeDisabled: false,
+
+    // The media sources to use when using screen sharing with the Chrome
+    // extension.
+    desktopSharingChromeSources: [ 'screen', 'window' ],
+
+    // Required version of Chrome extension
+    desktopSharingChromeMinExtVersion: '0.1',
+
+    // Whether desktop sharing should be disabled on Firefox.
+    desktopSharingFirefoxDisabled: true
+};
+
+var intro_id;
+var user_info = {};
+
+$('[name="room-id"]').keyup(function(e){
+        $('#room_id').text($(this).val());
+        $('html head title').text('揪松小幫手:' + $(this).val());
+}).keyup();
+
+
+var update_user_info = function(){
+    $.get('https://intro.g0v.ronny.tw/event/data/' + intro_id, function(ret){
+            var intros = ret;
+            for (var intro of intros) {
+                user_info[intro.account] = intro;
+            }
+            setTimeout(update_user_info, 5000);
+    }, 'json');
+};
+
+$('#form').submit(function(e){
+        e.preventDefault();
+        confOptions.confID = $('[name="room-id"]').val();
+        intro_id = $('[name="intro-id"]').val();
+        robot_nickname = $('[name="robot-nick"]').val();
+        update_user_info();
+
+        
+    $('#form').hide();
+    $('#track-video').show();
+
+    JitsiMeetJS.init(initOptions);
+
+    connection = new JitsiMeetJS.JitsiConnection(null, null, options);
+
+    connection.addEventListener(
+        JitsiMeetJS.events.connection.CONNECTION_ESTABLISHED,
+        onConnectionSuccess);
+    connection.addEventListener(
+        JitsiMeetJS.events.connection.CONNECTION_FAILED,
+        onConnectionFailed);
+    connection.addEventListener(
+        JitsiMeetJS.events.connection.CONNECTION_DISCONNECTED,
+        disconnect);
+
+    connection.connect();
+
+    JitsiMeetJS.createLocalTracks({ devices: [ 'desktop' ] })
+        .then(onLocalTracks)
+        .catch(error => {
+            throw error;
+        });
+});
+</script>
+</body>
+</html>

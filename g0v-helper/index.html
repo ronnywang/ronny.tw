@@ -23,6 +23,10 @@ body, div.container-fluid {
     width: 128px;
     float: left;
     position: relative;
+}
+.member-avatar {
+    width: 128px;
+    height: 128px;
     border: 1px solid black;
 }
 .member-displayname {
@@ -79,9 +83,8 @@ html {
         <h3>成員名單</h3>
         <script id="tmpl-member-box" type="text/html">
             <div class="member-box">
-                <div style="width: 128px; height: 128px">
+                <div class="member-avatar">
                     <img class="member-image" src="" width="128" height="128" style="display:none">
-                    <span class="member-nointro" style="word-break: break-all">無自介使用者</span>
                 </div>
                 <span class="member-displayname">Fellow Jitster</span>
                 <div class="member-intro">這是自我介紹這是自我介紹這是自我介紹</div>
@@ -193,7 +196,6 @@ var update_member_list = function(){
             var info = user_info[participant._displayName];
             $(`#member-${id} img`).attr('src', info.avatar);
             $(`#member-${id} .member-image`).show();
-            $(`#member-${id} .member-nointro`).hide();
             $(`#member-${id} .member-intro`).text(info.keyword);
             if ('undefined' !== typeof(new_user[id])) {
                 new_user[id].slack = true;
@@ -204,7 +206,6 @@ var update_member_list = function(){
             $(`#member-${id} .member-intro`).text('未自介使用者');
             $(`#member-${id}`).addClass('no-intro');
             $(`#member-${id} .member-image`).hide();
-            $(`#member-${id} .member-nointro`).show();
             if ('undefined' !== typeof(new_user[id])) {
                 new_user[id].slack = false;
             }

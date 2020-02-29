@@ -7,14 +7,45 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css">
     <script src="https://meet.jit.si/libs/lib-jitsi-meet.min.js"></script>
+    <style>
+body, div.container-fluid {
+    height: 100%;
+    max-height: 100%;
+}
+.member-area {
+    left: 0px;
+    height: 20%;
+    max-height: 20%;
+}
+#member-list { overflow: hidden; height: 200px; }
+.member-box { height: 200px; width: 128px; float: left; }
+.member-displayname { position: relative; top: 0px; left: 0px; height: 13px; }
+.member-talking { background-color: yellow; }
+#main-area {
+    height: 70%;
+    max-height: 70%;
+}
+html {
+        height: 100%;
+}
+.col {
+    height: 100%;
+    max-height: 100%;
+    overflow: scroll;
+}
+#message {
+    overflow: scroll;
+    height: 100%;
+}
+    </style>
 </head>
 <body>
 <div class="container-fluid">
-    <h1>
-        <input type="text" id="title" value="g0v 線上黑客松-次頻道1" style="width: 100%">
-    </h1>
-    <div class="row">
+    <div class="row" id="main-area">
         <div class="col">
+            <h1>
+                <input type="text" id="title" value="g0v 線上黑客松-次頻道1" style="width: 100%">
+            </h1>
             <form id="form">
                 頻道ID：<input type="text" name="room-id" value="g0v-test"><br>
                 自我介紹活動ID：<input type="text" name="intro-id" value="test"><br>
@@ -29,16 +60,10 @@
 歡迎來到「次頻道1」，這邊在討論「ooxx專案」
 若無 slack 帳號，可以至 https://join.g0v.tw/ 註冊帳號
 若未提供自我介紹，可至 https://intro.g0v.ronny.tw/ 自我介紹</textarea><br>
-            <div id="message"></div>
+            <div id="message">
+            </div>
         </div>
     </div><!-- .row -->
-        <style>
-.member-area { position: absolute; left: 0px; top:500px; }
-#member-list { overflow: hidden; height: 200px; }
-.member-box { height: 200px; width: 128px; float: left; }
-.member-displayname { position: relative; top: 0px; left: 0px; height: 13px; }
-.member-talking { background-color: yellow; }
-        </style>
     <div class="member-area">
         <h3>成員名單</h3>
         <script id="tmpl-member-box" type="text/html">

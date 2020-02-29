@@ -179,13 +179,12 @@ var add_message = function(type, params){
     $('#message').scroll(0);
 };
 
-var update_member_list = function(){
+var update_member_list = function(show_intro){
     $('.member-box').addClass('checking');
     var new_user = {};
     for (var id in room.participants) {
         var participant = room.participants[id];
         if (!$('#member-' + id).length) {
-            new_user[id] = {id: id};
             var member_box = $($('#tmpl-member-box').html());
             member_box.attr('id', `member-${id}`);
             member_box.attr('title', `member-${id}`);
@@ -203,26 +202,23 @@ var update_member_list = function(){
             $(`#member-${id} img`).attr('src', info.avatar);
             $(`#member-${id} .member-image`).show();
             $(`#member-${id} .member-intro`).text(info.keyword);
-            if ('undefined' !== typeof(new_user[id])) {
-                new_user[id].slack = true;
-            } else if ($(`#member-${id}`).is('no-intro')) {
-                new_user[id] = {slack: true};
+            if ($(`#member-${id}`).data('last-intro-name') != participant._displayName) {
+                $(`#member-${id}`).data('last-intro-name', participant._displayName);
+                new_user[id] = 'welcome';
             }
         } else {
             $(`#member-${id} .member-intro`).text('未自介使用者');
-            $(`#member-${id}`).addClass('no-intro');
             $(`#member-${id} .member-image`).hide();
             if ('undefined' !== typeof(new_user[id])) {
-                new_user[id].slack = false;
+                new_user[id] = 'newuser_withoutslack';
             }
         }
     }
     $('.member-box.checking').remove();
+    if (!show_intro) return;
     for (var id in new_user) {
-        if (new_user[id].slack == false) {
-            add_message('newuser_withoutslack', [id]);
-        } else {
-            add_message('welcome', [id]);
+        if (new_user[id]) {
+            add_message(new_user[id], [id]);
         }
     }
 };
@@ -233,7 +229,7 @@ function onConferenceJoined() {
     for (let i = 0; i < localTracks.length; i++) {
         room.addTrack(localTracks[i]);
     }
-    update_member_list();
+    update_member_list(true);
     for (var id in room.participants) {
         for (var track_id in room.participants[id].tracks) {
             var track = room.participants[id].tracks[track_id];
@@ -243,7 +239,7 @@ function onConferenceJoined() {
         }
     }
     room.on(JitsiMeetJS.events.conference.USER_JOINED, (id, user) => {
-        update_member_list();
+        update_member_list(true);
     });
     room.on(JitsiMeetJS.events.conference.DOMINANT_SPEAKER_CHANGED, (id) => {
         $('.member-box').removeClass('member-talking');
@@ -255,10 +251,10 @@ function onConferenceJoined() {
     });
     room.on(JitsiMeetJS.events.conference.USER_LEFT, (id, user) => {
         onUserLeft(id);
-        update_member_list();
+        update_member_list(true);
     });
     room.on(JitsiMeetJS.events.conference.DISPLAY_NAME_CHANGED, (id, user) => {
-        update_member_list();
+        update_member_list(true);
     });
     room.on(JitsiMeetJS.events.conference.MESSAGE_RECEIVED, (id, text, ts) => {
     });

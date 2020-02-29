@@ -18,8 +18,19 @@ body, div.container-fluid {
     max-height: 20%;
 }
 #member-list { overflow: hidden; height: 200px; }
-.member-box { height: 200px; width: 128px; float: left; }
-.member-displayname { position: relative; top: 0px; left: 0px; height: 13px; }
+.member-box {
+    height: 200px;
+    width: 128px;
+    float: left;
+    position: relative;
+    border: 1px solid black;
+}
+.member-displayname {
+    position: absolute;
+    top: 105px;
+    left: 4px;
+    background-color: rgba(255,255,255,0.5);
+}
 .member-talking { background-color: yellow; }
 #main-area {
     height: 70%;
@@ -68,9 +79,12 @@ html {
         <h3>成員名單</h3>
         <script id="tmpl-member-box" type="text/html">
             <div class="member-box">
-                <img src="" width="128" height="128">
-                <span class="member-displayname"></span>
-                <div class="member-intro"></div>
+                <div style="width: 128px; height: 128px">
+                    <img class="member-image" src="" width="128" height="128" style="display:none">
+                    <span class="member-nointro" style="word-break: break-all">無自介使用者</span>
+                </div>
+                <span class="member-displayname">Fellow Jitster</span>
+                <div class="member-intro">這是自我介紹這是自我介紹這是自我介紹</div>
             </div>
         </script>
         <div id="member-list">
@@ -168,11 +182,18 @@ var update_member_list = function(){
             member_box.attr('title', `member-${id}`);
             $('#member-list').append(member_box);
         }
-        $(`#member-${id} .member-displayname`).text(participant._displayName);
+        if (null === participant._displayName) {
+            $(`#member-${id} .member-displayname`).text('Fellow Jitster');
+        } else {
+            $(`#member-${id} .member-displayname`).text(participant._displayName);
+        }
+
         $(`#member-${id}`).removeClass('checking');
         if ('undefined' !== typeof(user_info[participant._displayName])) {
             var info = user_info[participant._displayName];
             $(`#member-${id} img`).attr('src', info.avatar);
+            $(`#member-${id} .member-image`).show();
+            $(`#member-${id} .member-nointro`).hide();
             $(`#member-${id} .member-intro`).text(info.keyword);
             if ('undefined' !== typeof(new_user[id])) {
                 new_user[id].slack = true;
@@ -182,6 +203,8 @@ var update_member_list = function(){
         } else {
             $(`#member-${id} .member-intro`).text('未自介使用者');
             $(`#member-${id}`).addClass('no-intro');
+            $(`#member-${id} .member-image`).hide();
+            $(`#member-${id} .member-nointro`).show();
             if ('undefined' !== typeof(new_user[id])) {
                 new_user[id].slack = false;
             }

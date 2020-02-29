@@ -191,10 +191,11 @@ var update_member_list = function(show_intro){
             $('#member-list').append(member_box);
         }
         if (null === participant._displayName) {
-            $(`#member-${id} .member-displayname`).text('Fellow Jitster');
+            displayname = 'Fellow Jitster';
         } else {
-            $(`#member-${id} .member-displayname`).text(participant._displayName);
+            displayname = participant._displayName;
         }
+        $(`#member-${id} .member-displayname`).text(displayname);
 
         $(`#member-${id}`).removeClass('checking');
         if ('undefined' !== typeof(user_info[participant._displayName])) {
@@ -202,14 +203,15 @@ var update_member_list = function(show_intro){
             $(`#member-${id} img`).attr('src', info.avatar);
             $(`#member-${id} .member-image`).show();
             $(`#member-${id} .member-intro`).text(info.keyword);
-            if ($(`#member-${id}`).data('last-intro-name') != participant._displayName) {
-                $(`#member-${id}`).data('last-intro-name', participant._displayName);
+            if ($(`#member-${id}`).data('last-intro-name') != displayname) {
+                $(`#member-${id}`).data('last-intro-name', displayname);
                 new_user[id] = 'welcome';
             }
         } else {
             $(`#member-${id} .member-intro`).text('未自介使用者');
             $(`#member-${id} .member-image`).hide();
-            if ('undefined' !== typeof(new_user[id])) {
+            if ($(`#member-${id}`).data('last-intro-name') != displayname) {
+                $(`#member-${id}`).data('last-intro-name', displayname);
                 new_user[id] = 'newuser_withoutslack';
             }
         }

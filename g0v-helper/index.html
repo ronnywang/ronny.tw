@@ -166,7 +166,7 @@ var add_message = function(type, params){
         var account = room.participants[params[0]]._displayName;
         var info = user_info[account];
         dom.addClass('alert-primary');
-        dom.append($('<img>').attr({width:64,height:64,src:info.avatar}));
+        dom.append($('<img>').attr({width:32,height:32,src:info.avatar}).css({"padding-right":"3px"}));
         dom.append($('<span></span>').text(`歡迎 @${account} 加入，自我介紹：${info.keyword}`));
     }
     $('#message').prepend(dom);

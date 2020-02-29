@@ -160,8 +160,14 @@ var robot_nickname = '揪松小幫手';
 var add_message = function(type, params){
     var dom = $('<div></div>').addClass('alert').attr('role', 'alert');;
     if (type == 'newuser_withoutslack') {
-        dom.text(`新加入朋友 ${room.participants[params[0]]._displayName} ，但未能找到您的名稱的自我介紹，請至 https://intro.g0v.ronny.tw/event/show/${intro_id} 增加自我介紹，並將這邊的名稱改成與 slack 相同`);
+        if ('undefined' === typeof(room.participants[params[0]]._displayName)) {
+            name = 'Fellow Jitster';
+        } else {
+            name = room.participants[params[0]]._displayName;
+        }
+        dom.text(`新加入朋友 ${name}  ，還未增加自我介紹（請您看看您的訊息喔）`);
         dom.addClass('alert-primary');
+        room.sendPrivateTextMessage(params[0], `${name} 您好，歡迎加入本聊天室，為了方便讓大家更能知道你是誰並在討論完後能找到您，您可以至 https://join.g0v.tw/ 註冊一個 g0v slack 帳號。如果您已經有帳號，可以至 https://intro.g0v.ronny.tw/event/show/${intro_id} 增加您的自我介紹，並可以將您的 Jitsi 顯示名稱改成與 slack 帳號相同，這邊將能顯示您的資訊，謝謝。`);
     } else if (type == 'welcome') {
         var account = room.participants[params[0]]._displayName;
         var info = user_info[account];

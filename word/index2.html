@@ -1,0 +1,96 @@
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-2.1.1.min.js"
+    integrity="sha256-h0cGsrExGgcZtSZ/fRz4AwV+Nn6Urh/3v3jFRQ0w9dQ="
+      crossorigin="anonymous"></script>
+</head>
+<body>
+<form id="form">
+    字: <input type="text" name="word" value="永"><button type="submit">看字</button>
+</form>
+<div id="strokes" style="width: 500px; height: 500px"><canvas id="canvas" width="2000" height="2000" style="width: 500px; height: 500px"></canvas></div>
+<script>
+$('#canvas').click(function(e){
+    var x = e.offsetX * 4;
+    var y = e.offsetY * 4;
+    var dx = x - strokes[current_stroke].track[0].x;
+    var dy = y - strokes[current_stroke].track[0].y;
+    if (dx * dx + dy * dy < 100 * 100) {
+        current_stroke ++;
+        draw();
+    }
+});
+
+var draw = function(){
+    var ctx = $('#canvas')[0].getContext('2d');
+    ctx.clearRect(0, 0, 2000, 2000);
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 20;
+    c = 0;
+    for (var stroke of strokes) {
+        c ++;
+        ctx.save();
+        ctx.beginPath();
+        for (var outline of stroke.outline) {
+            var path = outline;
+            switch (path.type) {
+                case "M":
+                    (ctx.moveTo(path.x, path.y));
+                    break;
+                case "L":
+                    (ctx.lineTo(path.x, path.y));
+                    break;
+                case "C":
+                    (ctx.bezierCurveTo(path.begin.x, path.begin.y, path.mid.x, path.mid.y, path.end.x, path.end.y));
+                    break;
+                case "Q":
+                    (ctx.quadraticCurveTo(path.begin.x, path.begin.y, path.end.x, path.end.y));
+                    break;
+                default:
+                    (void 0);
+            }
+        }
+        if (current_stroke < c) {
+            ctx.stroke();
+        } else {
+            ctx.fill();
+        }
+    }
+    for (var i = 0; i < current_stroke; i ++) {
+		stroke = strokes[i];
+		ctx.font = 'normal 80px Arial';
+		ctx.textAlign = 'center';
+		ctx.strokeStyle = "green";
+		ctx.lineWidth = 10;
+		ctx.strokeText((i + 1), stroke.track[0].x, stroke.track[0].y);
+
+		ctx.strokeStyle = "red";
+		ctx.lineWidth = 5;
+		ctx.beginPath();
+		for (var track of stroke.track) {
+			ctx.lineTo(track.x, track.y);
+		}
+		ctx.stroke();
+    }
+};
+var strokes;
+var current_stroke = 0;
+
+$(function(){
+    $('#form').submit(function(e){
+        e.preventDefault();
+        $.get('https://www.moedict.tw/json/' + ($('[name="word"]').val().charCodeAt().toString(16)) + '.json', function(ret) {
+            var ctx = $('#canvas')[0].getContext('2d');
+            strokes = ret;
+            current_stroke = 0;
+            draw();
+
+
+        }, 'json');
+    }).submit();
+});
+</script>
+</body>
+</html>

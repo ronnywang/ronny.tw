@@ -11,7 +11,7 @@
 <p>從 <a href="https://docs.google.com/spreadsheets/d/1xyxYGKU7iia3xSu6rF9F6YCcXOcEqrFsI2RD493bAxE/edit#gid=0">g0v SNS 治理紀錄</a> 隨機排序(重新整理重刷名單)</p>
 <div id="result"></div>
 <script>
-$.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vQydJyzRhZZFKqGF7OVGv_h7xh2Ku7bS3HgsDXLWj1TknTpjxm7IJtrMX2_74tSmW6fB5ZepvyYApdC/pub?output=csv', function(ret){
+$.get('https://aws.ronny.tw/g0v-sns/proxy.php', function(ret){
         var lines = ret.split("\n");
         var names = [];
         for (var i = 1; i < lines.length; i ++) {
